@@ -6,7 +6,7 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import { GetStaticProps } from "next";
-import { FaqModel } from "../api/Faq";
+import { FaqModel } from "../../api/Faq";
 import { openDB } from "../openDB";
 
 interface FaqProps {
