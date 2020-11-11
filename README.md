@@ -28,3 +28,30 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## make
+
+- url을 통해 들어온 값이 실제 렌더링 값에 반영됨
+- useRouter의 query 사용
+
+```ts
+const { query } = useRouter();
+
+const initialValues = {
+  make: query.make || "all",
+  model: query.model || "all",
+  minPrice: query.minPrice || "all",
+  maxPrice: query.maxPrice || "all",
+};
+```
+
+- getServerSideProps이용하여 기존에 들어와야할 값을 먼저 가져옴
+
+```ts
+import { GetServerSideProps } from "next";
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const makes = await getMakes();
+  return { props: { makes } };
+};
+```
