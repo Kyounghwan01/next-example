@@ -25,6 +25,7 @@ export async function getPaginatedCars(query: ParsedUrlQuery) {
     "@maxPrice": getValueNumber(query.maxPrice),
   };
 
+  // 페이지네이션 값
   const carsPromise = db.all<CarModel[]>(
     `SELECT * ${mainQuery} LIMIT @rowsPerPage OFFSET @offset`,
     {
@@ -34,6 +35,7 @@ export async function getPaginatedCars(query: ParsedUrlQuery) {
     }
   );
 
+  // 전체 수
   const totalRowsPromise = db.get<{ count: number }>(
     `SELECT COUNT(*) as count ${mainQuery}`,
     dbParams

@@ -29,7 +29,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-## make
+## filters based on url queryString with formilk
 
 - url을 통해 들어온 값이 실제 렌더링 값에 반영됨
 - useRouter의 query 사용
@@ -55,3 +55,11 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return { props: { makes } };
 };
 ```
+
+## Dynamic Dropdown using Formik and SWR
+
+- swr이용 selection 바뀌면 api 호출
+
+## pagenation with filters for the list of cars
+
+- ssr에서 페이지네이션
