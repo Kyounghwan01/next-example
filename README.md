@@ -41,7 +41,7 @@ const initialValues = {
   make: query.make || "all",
   model: query.model || "all",
   minPrice: query.minPrice || "all",
-  maxPrice: query.maxPrice || "all",
+  maxPrice: query.maxPrice || "all"
 };
 ```
 
@@ -63,3 +63,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
 ## pagenation with filters for the list of cars
 
 - ssr에서 페이지네이션
+
+## shallow link 이동으로 getInitalProps가 작동안함으로 내부 반응형 데이터가 변하지 않음
+
+- swr을 하기전 api를 만듬, api - cars.ts
+- api 에서는 진짜 await axios를 해서 값을 받아와서 브라우저의 클라이언트로 res를 보내줘야함
+- res보내면 프론트에서는 swr을 이용해서 값 핸들링 `const {data} = useSWR('/api/cars')`

@@ -12,15 +12,15 @@ import { Nav } from "../components/Nav";
 export const theme = createMuiTheme({
   palette: {
     primary: {
-      main: "#556cd6",
+      main: "#556cd6"
     },
     error: {
-      main: red.A400,
+      main: red.A400
     },
     background: {
-      default: "#fff",
-    },
-  },
+      default: "#fff"
+    }
+  }
 });
 
 export default class MyApp extends App {
@@ -38,7 +38,7 @@ export default class MyApp extends App {
     return (
       <React.Fragment>
         <Head>
-          <title>My page</title>
+          <title>Car Trader</title>
           <meta
             name="viewport"
             content="minimum-scale=1, initial-scale=1, width=device-width"
@@ -50,7 +50,7 @@ export default class MyApp extends App {
           <Nav />
           {/* SWRConfig -> swr의 옵션항목의 default 값을 설정 */}
           <SWRConfig
-            value={{ fetcher: (url: string) => axios(url).then((r) => r.data) }}
+            value={{ fetcher: (url: string) => axios(url).then(r => r.data) }}
           >
             <Container maxWidth={false}>
               <Box marginTop={2}>

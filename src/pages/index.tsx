@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Button,
   FormControl,
@@ -7,7 +8,7 @@ import {
   MenuItem,
   Paper,
   Select,
-  SelectProps,
+  SelectProps
 } from "@material-ui/core";
 // formik -> 타입스크립트 지원 잘해주는 form 라이브러리
 import { Field, Form, Formik, useField, useFormikContext } from "formik";
@@ -24,12 +25,12 @@ export interface HomeProps {
   singleColumn?: boolean;
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   paper: {
     margin: "auto",
     maxWidth: 500,
-    padding: theme.spacing(3),
-  },
+    padding: theme.spacing(3)
+  }
 }));
 
 const prices = [500, 1000, 5000, 15000, 25000, 50000, 250000];
@@ -43,18 +44,18 @@ export default function Search({ makes, models, singleColumn }: HomeProps) {
     make: getAsString(query.make) || "all",
     model: getAsString(query.model) || "all",
     minPrice: getAsString(query.minPrice) || "all",
-    maxPrice: getAsString(query.maxPrice) || "all",
+    maxPrice: getAsString(query.maxPrice) || "all"
   };
 
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values) => {
+      onSubmit={values => {
         // http://localhost:3000/?make=Ford&model=all&minPrice=all&maxPrice=all&page=1
         router.push(
           {
             pathname: "/cars",
-            query: { ...values, page: 1 },
+            query: { ...values, page: 1 }
           },
           undefined,
           { shallow: true }
@@ -77,7 +78,7 @@ export default function Search({ makes, models, singleColumn }: HomeProps) {
                     <MenuItem value="all">
                       <em>All Makes</em>
                     </MenuItem>
-                    {makes.map((make) => (
+                    {makes.map(make => (
                       <MenuItem key={make.make} value={make.make}>
                         {`${make.make} (${make.count})`}
                       </MenuItem>
@@ -105,7 +106,7 @@ export default function Search({ makes, models, singleColumn }: HomeProps) {
                     <MenuItem value="all">
                       <em>No Min</em>
                     </MenuItem>
-                    {prices.map((price) => (
+                    {prices.map(price => (
                       <MenuItem key={price} value={price}>
                         {price}
                       </MenuItem>
@@ -125,7 +126,7 @@ export default function Search({ makes, models, singleColumn }: HomeProps) {
                     <MenuItem value="all">
                       <em>No Max</em>
                     </MenuItem>
-                    {prices.map((price) => (
+                    {prices.map(price => (
                       <MenuItem key={price} value={price}>
                         {price}
                       </MenuItem>
@@ -170,28 +171,22 @@ export function ModelSelect({
   // formik에서 주는 값을 컴포넌트로 내림
   // fild가 input의 value같은 느낌
   const [field] = useField({
-    name: props.name,
+    name: props.name
   });
-  console.log(field);
 
   const initialModelsOrUndefined = make === initialMake ? models : undefined;
 
   // 값을 캐쉬하여 다음번에 부를때는 api 호출 안함, make가 바뀌면 model 바꾸는 api 호출함
-  // const { data: newModels } = useSWR<Model[]>("/api/models?make=" + make, {
-  //   dedupingInterval: 60000,
-  //   initialData: make === "all" ? [] : initialModelsOrUndefined,
-  // });
-  const { data } = useSWR<Model[]>("/api/models?make=" + make, {
+  const { data: newModels } = useSWR<Model[]>("/api/models?make=" + make, {
     dedupingInterval: 60000,
-    onSuccess: (newValues) => {
-      if (!newValues.map((a) => a.model).includes(field.value)) {
-        // api 에서 가져온 값에 현제 model value가 없다면 all로 model을 all로 바꾸라
-        setFieldValue("model", "all");
-      }
-    },
+    initialData: make === "all" ? [] : initialModelsOrUndefined
   });
-  const newModels = data || models;
-  console.log(newModels);
+
+  useEffect(() => {
+    if (!newModels?.map(a => a.model).includes(field.value)) {
+      setFieldValue("model", "all");
+    }
+  }, [make, newModels]);
 
   return (
     <FormControl fullWidth variant="outlined">
@@ -206,7 +201,7 @@ export function ModelSelect({
         <MenuItem value="all">
           <em>All Models</em>
         </MenuItem>
-        {newModels.map((model) => (
+        {newModels?.map(model => (
           <MenuItem key={model.model} value={model.model}>
             {`${model.model} (${model.count})`}
           </MenuItem>
@@ -216,7 +211,7 @@ export function ModelSelect({
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async ctx => {
   const make = getAsString(ctx.query.make);
   const [makes, models] = await Promise.all([getMakes(), getModels(make)]);
   return { props: { makes, models } };
